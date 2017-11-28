@@ -14,9 +14,6 @@
 
 void * snd_total(void* arg);//Server가 입력한 데이터를 모든 Client들에게 전송하는 함수
 
-void send_msg(char * msg, int len);//입력받은 데이터를 모든 Client들에게 roof back 시켜주는 함수
-
-
 int clnt_cnt=0;//현재 Client의 개수를 저장할 변수 선언
 int clnt_socks[MAX_CLNT];//Client들의 소켓 정보를 저장하는 배열 선언
 pthread_mutex_t mutx;//뮤텍스 mutx 선언
@@ -47,13 +44,13 @@ int main(int argc, char *argv[])
 	
 	if(bind(serv_sock, (struct sockaddr*) &serv_adr, sizeof(serv_adr))==-1)//IP주소와 PORT 할당중 문제가 생겼다면
 	{
-		printf("bind() error\n\n");//에러문구 출력
+		perror("bind() error\n\n");//에러문구 출력
 		exit(1);//프로그램 종료
 	}
 
 	if(listen(serv_sock, 5)==-1)//연결요청 가능상태로 변경중 문제가 생겼다면 
 	{
-		printf("listen() error\n\n");//에러문구 출력
+		perror("listen() error\n\n");//에러문구 출력
 		exit(1);//프로그램 종료
 	}
 
@@ -97,7 +94,6 @@ void* snd_total(void* arg)//Server가 입력한 데이터를 모든 Client들에
 			write(clnt_socks[s_idx],send_BUF,strlen(send_BUF));//각각의 Client들에게 데이터를 전송
 		}
 		pthread_mutex_unlock(&mutx);//mutex UNLOCK
-		
 	}
 }
 
