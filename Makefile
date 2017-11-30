@@ -1,0 +1,17 @@
+DIRS = lib sever client
+.PHONY: all clean
+
+all:
+        @for d in $(DIRS); \
+        do \
+                $(MAKE) -C $$d; \
+        done
+
+clean:
+        @for d in $(DIRS); \
+        do \
+                $(MAKE) -C $$d clean; \
+        done
+exe:
+        Myapp/main
+
