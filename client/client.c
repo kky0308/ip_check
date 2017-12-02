@@ -102,4 +102,3 @@ void* recv_msg(void* arg)//server로 부터 데이터를 받을때 사용되는 
 	}
 	return NULL;
 }
-  
