@@ -24,12 +24,6 @@ char send_BUF[BUF_SIZE];//Server가 입력한 데이터를 Client에게 보낼�
 char Roof_Back_data[BUF_SIZE];//입력받은 데이터를 모든 Client들에게 roof back 시켜줄때 쓰이는 배열 
 
 
-int itg_data;//온, 습도를 문자열에서 정수형 데이터로 전환받을 변수 선언
-char res_temp[30];
-char res_hud[30];//최종적 시간과 온, 습도를 저장하여 파일에 출력시키는 배열 선언
-unsigned int temp;
-unsigned int hud;//온도와 습도를 정수로 저장하는 변수 선언
-
 int main(int argc, char *argv[])
 {
 
@@ -126,14 +120,14 @@ void * handle_clnt(void * arg)//Client로 부터 입력받은 데이터를 처�
 		}
 
 
-			if(initial == 0)//해당 아이디를 찾기 위한 조건문
-			{
-				int cnt = check_name(msg);//해당 채팅데이터의 아이디 사이즈를 반환받음
-				memcpy(user,msg,cnt+2);//받은 아이디를 user 버퍼에 저장 +2 는 괄호 2개
-				initial = 1;//다음에 호출되지 않기 위하여 Flag set
-			}
-			printf("user>>	%s\n",msg);//해당 데이터를 화면에 출력
-			send_msg(msg,str_len);//채팅 데이터만 roof back
+		if(initial == 0)//해당 아이디를 찾기 위한 조건문
+		{
+			int cnt = check_name(msg);//해당 채팅데이터의 아이디 사이즈를 반환받음
+			memcpy(user,msg,cnt+2);//받은 아이디를 user 버퍼에 저장 +2 는 괄호 2개
+			initial = 1;//다음에 호출되지 않기 위하여 Flag set
+		}
+		printf("user>>	%s\n",msg);//해당 데이터를 화면에 출력
+		send_msg(msg,str_len);//채팅 데이터만 roof back
 		
 	}	
 	pthread_mutex_lock(&mutx);//metux LOCK
