@@ -6,13 +6,13 @@ OBJFILES = ipcheck.o
 INCLUDE = ../include
 
 $(OUTPUT) : $(OBJFILES)
-        gcc -fPIC -shared -Wl,-soname=$(OUTPUT) $(OBJFILES) -o libmyfuncs.so.1.0 -lc
-        ln -s libmyfuncs.so.1.0 libmyfuncs.so
-        ln -s libmyfuncs.so.1.0 libmyfuncs.so.1
+	gcc -fPIC -shared -Wl,-soname=$(OUTPUT) $(OBJFILES) -o libmyfuncs.so.1.0 -lc
+	ln -s libmyfuncs.so.1.0 libmyfuncs.so
+	ln -s libmyfuncs.so.1.0 libmyfuncs.so.1
 %.o : %.c
-        $(CC) -c $^ 
+	$(CC) -c $^ 
 clean:
-        rm *.o $(OUTPUT)
-        rm libmyfuncs.so libmyfuncs.so.1.0
+	rm *.o $(OUTPUT)
+	rm libmyfuncs.so libmyfuncs.so.1.0
 
 
