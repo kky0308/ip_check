@@ -1,4 +1,4 @@
-DIRS = lib server
+DIRS = lib server client
 .PHONY: all clean
 
 all:
