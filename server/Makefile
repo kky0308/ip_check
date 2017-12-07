@@ -5,13 +5,13 @@ LIB = ../lib
 CC = gcc
 CFLAGS = -g -c -I
 OUTPUT = server
-OBJFILES = server.c
+OBJFILES = server_code.c
 
 $(OUTPUT) : $(OBJFILES)
-        export LD_LIBRARY_PATH=../lib
-        $(CC) -o $(OUTPUT) $(OBJFILES) -L../lib -I$(INCLUDE) -lmyfuncs -pthread
+	export LD_LIBRARY_PATH=../lib
+	$(CC) -o $(OUTPUT) $(OBJFILES) -L$(LIB) -I$(INCLUDE) -lmyfuncs -pthread
 clean:
-        rm  server
+	rm  server
 
 
 

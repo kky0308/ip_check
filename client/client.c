@@ -42,7 +42,7 @@ int main(int argc, char* argv[])
       exit(1);//프로그램 종료
    }
 
-   sprintf(name,"[%s]",argv[3]);//마지막에 입력받은 인수를 통하여 Client이름으로 저장
+   sprintf(name,"%s",argv[3]);//마지막에 입력받은 인수를 통하여 Client이름으로 저장
    sock = socket(PF_INET, SOCK_STREAM,0);//Client 소켓 생성
 
    memset(&serv_addr,0,sizeof(serv_addr));//serv_addr 버퍼 초기화
@@ -67,7 +67,8 @@ int main(int argc, char* argv[])
 void* send_msg(void* arg)//serve이r에 데이터를 전송할때 사용되는 함수
 {
    int sock = *((int*)arg);//인자로 받아온 소켓값을 sock에 저장
-
+   write(sock, name,strlen(name));//server에 닉네임과 메세지를 데이터로 전송
+   /*
    char name_msg[NAME_SIZE+BUF_SIZE];//이름과 메세지를 통시에 출력하기 위한 배열 선언
    while(1)//무한루프 생성
    {
@@ -78,10 +79,11 @@ void* send_msg(void* arg)//serve이r에 데이터를 전송할때 사용되는 �
          exit(1);//프로그램 종료
       }
       sprintf(name_msg,"%s > %s",name,msg);//해당 Client에 대한 닉네임과 키보드입력을 name_msg 배열에 저장
-      write(sock, name_msg,strlen(name_msg));//server에 닉네임과 메세지를 데이터로 전송
+
       memset(msg,0,sizeof(msg));//이전 버퍼를 지우기 위한 명령문
 
    }
+   */
    return NULL;
 }
 
