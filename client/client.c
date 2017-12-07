@@ -14,15 +14,13 @@
 
 #define BUF_SIZE 100
 #define NAME_SIZE 20
-
 #define MAXTIMINGS 83
 #define DHTPIN 7
 
 void* send_msg(void* arg);//데이터를 server로 전송하는 함수
 void* recv_msg(void* arg);//server에서 전송된 데이터를 받는 함수
 
-
-char name[NAME_SIZE] = "[DEFAULT]";
+char name[NAME_SIZE] = "DEFAULT";
 char msg[BUF_SIZE];//메세지를 저장할 배열 선언
 
 int G_sock;//소켓을 전역변수로 전환하는 변수 선언
@@ -79,9 +77,7 @@ void* send_msg(void* arg)//serve이r에 데이터를 전송할때 사용되는 �
          exit(1);//프로그램 종료
       }
       sprintf(name_msg,"%s > %s",name,msg);//해당 Client에 대한 닉네임과 키보드입력을 name_msg 배열에 저장
-
       memset(msg,0,sizeof(msg));//이전 버퍼를 지우기 위한 명령문
-
    }
    */
    return NULL;
