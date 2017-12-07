@@ -24,8 +24,9 @@ pthread_mutex_t mutx;//뮤텍스 mutx 선언
 char send_BUF[BUF_SIZE];//Server가 입력한 데이터를 Client에게 보낼때 사용하는 배열 선언
 char Roof_Back_data[BUF_SIZE];//입력받은 데이터를 모든 Client들에게 roof back 시켜줄때 쓰이는 배열 
 struct check_args data[MAX_CLNT];
-int c_cnt=0;
+volatile int c_cnt=0;
 int k=0;
+char *sdata;
 int main(int argc, char *argv[])
 {
 
@@ -72,13 +73,13 @@ int main(int argc, char *argv[])
 
 		pthread_mutex_lock(&mutx);//mutex LOCK
 		clnt_socks[clnt_cnt++]=clnt_sock;//Client에 대한 소켓정보를 순서대로 누적하여 저장
-		
+		sdata=inet_ntoa(clnt_adr.sin_addr);
 		pthread_mutex_unlock(&mutx);//mutex UNLOCK
 	    printf("Connected client IP: %s \n", inet_ntoa(clnt_adr.sin_addr));//해당 네트워크 주소 문자열로 화면에 출력
+	    
 		pthread_create(&t_id, NULL, handle_clnt, (void*)&clnt_sock);//handle_clnt()에 대한 쓰레드 생성
 		pthread_create(&send_id,NULL,snd_total,(void*)&clnt_sock);//snd_total()에 대한 쓰레드 생성
-		data[c_cnt].ip=inet_ntoa(clnt_adr.sin_addr);
-		data[c_cnt].socket_id=clnt_sock;
+		
 
 		pthread_detach(send_id);
 		pthread_detach(t_id);//쓰레드 종료후 각각의 쓰레드 반환
@@ -129,17 +130,23 @@ void * handle_clnt(void * arg)//Client로 부터 입력받은 데이터를 처�
 	
 		//int cnt = check_name(msg);//해당 채팅데이터의 아이디 사이즈를 반환받음
 		memcpy(user,msg,strlen(msg));//받은 아이디를 user 버퍼에 저장 +2 는 괄호 2개
+		pthread_mutex_lock(&mutx);//metux LOCK
 		data[c_cnt].name=user;
+		data[c_cnt].ip=sdata;
+		data[c_cnt].socket_id=clnt_sock;
 		printf("접속: %s 학번: %s\n",data[c_cnt].ip,data[c_cnt].name);
 		ip_check(data,c_cnt,re_data);
 		if(re_data[0]>0)
 		{
 			for(k=0;k<re_data[0];k++)
 			{
+				write(re_data[k+1],"부정행위 실격처리\n",sizeof("부정행위 실격처리\n"));
 				shutdown(re_data[k+1],SHUT_RD);
 			}
 		}
+		printf("%d\n",c_cnt);
 		c_cnt++;
+		pthread_mutex_unlock(&mutx);//mutex UNLOCK
 	}	
 	pthread_mutex_lock(&mutx);//metux LOCK
 	for(i=0; i<clnt_cnt; i++)   //disconnecte된 Client를 제거하기 위한 반복문
