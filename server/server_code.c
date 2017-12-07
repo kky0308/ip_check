@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
 
 	pthread_mutex_init(&mutx, NULL);//mutx 초기화
 	serv_sock=socket(PF_INET, SOCK_STREAM, 0);//Server 소켓 생성
-
+	
 	memset(&serv_adr, 0, sizeof(serv_adr));//Server 통신 설정 변수 초기화
 	serv_adr.sin_family=AF_INET;//IPv4인터넷 프로토콜 
 	serv_adr.sin_addr.s_addr=htonl(INADDR_ANY);//서버의 IP주소 자동으로 찾아서 대입 
@@ -73,7 +73,9 @@ int main(int argc, char *argv[])
 
 		pthread_mutex_lock(&mutx);//mutex LOCK
 		clnt_socks[clnt_cnt++]=clnt_sock;//Client에 대한 소켓정보를 순서대로 누적하여 저장
-		sdata=inet_ntoa(clnt_adr.sin_addr);
+		sdata =(char *)malloc(13);
+		(char *)memset(sdata,0,13);
+		strcpy(sdata,inet_ntoa(clnt_adr.sin_addr));
 		pthread_mutex_unlock(&mutx);//mutex UNLOCK
 	    printf("Connected client IP: %s \n", inet_ntoa(clnt_adr.sin_addr));//해당 네트워크 주소 문자열로 화면에 출력
 	    
@@ -144,7 +146,6 @@ void * handle_clnt(void * arg)//Client로 부터 입력받은 데이터를 처�
 				shutdown(re_data[k+1],SHUT_RD);
 			}
 		}
-		printf("%d\n",c_cnt);
 		c_cnt++;
 		pthread_mutex_unlock(&mutx);//mutex UNLOCK
 	}	
